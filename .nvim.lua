@@ -8,12 +8,12 @@ end, { nargs = 0 })
 
 -- Comment divider line.
 vim.api.nvim_create_user_command("CommentDividerLine", function()
-	require("divide").commentLine()
+	require("divide").subheader()
 end, { nargs = 0 })
 
 -- Comment divider box.
 vim.api.nvim_create_user_command("CommentDividerBox", function()
-	require("divide").commentBox()
+	require("divide").header()
 end, { nargs = 0 })
 
 -- Show current config.
