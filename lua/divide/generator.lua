@@ -130,7 +130,7 @@ generator.subheader = function(config)
 	-- Total length of the comment line.
 	local length = config.length
 	-- Get current filetype.
-	local filetype = vim.api.nvim_get_option_value(0, "filetype")
+	local filetype = vim.api.nvim_buf_get_option(0, "filetype")
 	-- Get the language config for current filetype.
 	local language_config = config.language_config[filetype]
 	language_config = language_config or config.default
