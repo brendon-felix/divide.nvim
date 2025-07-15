@@ -1,12 +1,10 @@
-# comment-divider.nvim
+# divide.nvim
 
-https://github.com/user-attachments/assets/73103a2c-ba39-4349-b488-b6f3585042b7
-
-This project is meant to replace the [Comment Divider](https://github.com/stackbreak/comment-divider) for VSCode in NeoVim.
+Neovim replacement for the VS Code [Comment Divider](https://github.com/stackbreak/comment-divider) extension.
 
 ## Install
 
-Install `fangjunzhou/comment-divider.nvim` from your package manager.
+Install `brendon-felix/divide.nvim` from your package manager.
 
 ### Config
 

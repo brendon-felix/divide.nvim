@@ -1,19 +1,19 @@
-local commentGenerator = {}
+local generator = {}
 
 --- Generate comment divider line.
 ---@param comment string current buffer conetnt.
 ---@param bufLineLength number the length of current buffer line.
 ---@param commentLength number the total length of the comment divider.
----@param languageConfig table the language specific comment divider config.
----@param endLength number the length of lineEnd.
----@param seperatorLength number the length of lineSeperator.
----@param startLength number the length of lineStart.
+---@param language_config table the language specific comment divider config.
+---@param endLength number the length of line_end.
+---@param seperatorLength number the length of character.
+---@param startLength number the length of line_start.
 ---@return string lineStr the generated comment divider line.
-local function generateCommentLine(
+local function generate_subheader(
 	comment,
 	bufLineLength,
 	commentLength,
-	languageConfig,
+	language_config,
 	endLength,
 	seperatorLength,
 	startLength
@@ -31,10 +31,10 @@ local function generateCommentLine(
 	-- Construct the comment line.
 	local lineStr = ""
 	-- Start
-	lineStr = lineStr .. languageConfig.lineStart .. " "
+	lineStr = lineStr .. language_config.line_start .. " "
 	-- Left seperator.
 	for _ = 1, seperatorNum do
-		lineStr = lineStr .. languageConfig.lineSeperator
+		lineStr = lineStr .. language_config.character
 	end
 	-- Left center space.
 	for _ = 1, leftCenterSpace do
@@ -48,21 +48,21 @@ local function generateCommentLine(
 	end
 	-- Right seperator.
 	for _ = 1, seperatorNum do
-		lineStr = lineStr .. languageConfig.lineSeperator
+		lineStr = lineStr .. language_config.character
 	end
 	-- End
-	lineStr = lineStr .. " " .. languageConfig.lineEnd
+	lineStr = lineStr .. " " .. language_config.line_end
 	return lineStr
 end
 
 --- Generate a solid divider line.
 ---@param commentLength number the total length of the comment divider.
----@param languageConfig table the language specific comment divider config.
----@param endLength number the length of lineEnd.
----@param seperatorLength number the length of lineSeperator.
----@param startLength number the length of lineStart.
+---@param language_config table the language specific comment divider config.
+---@param endLength number the length of line_end.
+---@param seperatorLength number the length of character.
+---@param startLength number the length of line_start.
 ---@return string lineStr the generated comment divider line.
-local function generateSolidLine(commentLength, languageConfig, endLength, seperatorLength, startLength)
+local function generate_solid_line(commentLength, language_config, endLength, seperatorLength, startLength)
 	-- Calculate the total seperator length.
 	local totalSeperatorLength = commentLength - startLength - endLength - 2
 	local seperatorNum = math.floor(totalSeperatorLength / seperatorLength)
@@ -74,21 +74,21 @@ local function generateSolidLine(commentLength, languageConfig, endLength, seper
 	-- Construct the solid line.
 	local lineStr = ""
 	-- Start.
-	lineStr = lineStr .. languageConfig.lineStart
+	lineStr = lineStr .. language_config.line_start
 	-- Left space.
 	for i = 1, leftSpace do
 		lineStr = lineStr .. " "
 	end
 	-- Seperator.
 	for i = 1, seperatorNum do
-		lineStr = lineStr .. languageConfig.lineSeperator
+		lineStr = lineStr .. language_config.character
 	end
 	-- Right space.
 	for i = 1, rightSpace do
 		lineStr = lineStr .. " "
 	end
 	-- End.
-	lineStr = lineStr .. languageConfig.lineEnd
+	lineStr = lineStr .. language_config.line_end
 	return lineStr
 end
 
@@ -96,11 +96,11 @@ end
 ---@param comment string current buffer conetnt.
 ---@param bufLineLength number the length of current buffer line.
 ---@param commentLength number the total length of the comment divider.
----@param languageConfig table the language specific comment divider config.
----@param endLength number the length of lineEnd.
----@param startLength number the length of lineStart.
+---@param language_config table the language specific comment divider config.
+---@param endLength number the length of line_end.
+---@param startLength number the length of line_start.
 ---@return string lineStr the generated comment divider line.
-local function generateCenteredComment(comment, bufLineLength, commentLength, languageConfig, endLength, startLength)
+local function generate_centered_comment(comment, bufLineLength, commentLength, language_config, endLength, startLength)
 	-- Calculate left and righ space.
 	local leftSpace = math.floor((commentLength - startLength - endLength - bufLineLength) / 2)
 	local rightSpace = math.floor((commentLength - startLength - endLength - bufLineLength + 1) / 2)
@@ -108,7 +108,7 @@ local function generateCenteredComment(comment, bufLineLength, commentLength, la
 	-- Construct wrapped line.
 	local lineStr = ""
 	-- Start.
-	lineStr = lineStr .. languageConfig.lineStart
+	lineStr = lineStr .. language_config.line_start
 	-- Left space.
 	for i = 1, leftSpace do
 		lineStr = lineStr .. " "
@@ -120,29 +120,24 @@ local function generateCenteredComment(comment, bufLineLength, commentLength, la
 		lineStr = lineStr .. " "
 	end
 	-- End.
-	lineStr = lineStr .. languageConfig.lineEnd
+	lineStr = lineStr .. language_config.line_end
 	return lineStr
 end
 
 --- Generate comment line divider.
 ---@param config table config for comment generator.
-commentGenerator.commentLine = function(config)
-	-- Debug enabled.
-	local isDebug = config.debug
+generator.subheader = function(config)
 	-- Total length of the comment line.
 	local commentLength = config.commentLength
 	-- Get current filetype.
-	local filetype = vim.api.nvim_buf_get_option(0, "filetype")
-	if isDebug then
-		print("Current file type: " .. filetype)
-	end
+	local filetype = vim.api.nvim_get_option_value(0, "filetype")
 	-- Get the language config for current filetype.
-	local languageConfig = config.languageConfig[filetype]
-	languageConfig = languageConfig or config.defaultConfig
+	local language_config = config.language_config[filetype]
+	language_config = language_config or config.defaultConfig
 	-- Length for line components.
-	local startLength = string.len(languageConfig.lineStart)
-	local seperatorLength = string.len(languageConfig.lineSeperator)
-	local endLength = string.len(languageConfig.lineEnd)
+	local startLength = string.len(language_config.line_start)
+	local seperatorLength = string.len(language_config.character)
+	local endLength = string.len(language_config.line_end)
 
 	-- Start a new line.
 	-- Get current buffer row number.
@@ -158,9 +153,6 @@ commentGenerator.commentLine = function(config)
 		end
 		-- Trim all the white spaces.
 		comment = comment:gsub("^%s*(.-)%s*$", "%1")
-		if isDebug then
-			print("Current buffer line: " .. comment)
-		end
 		-- The length of current buffer line.
 		local bufLineLength = comment:len()
 
@@ -175,17 +167,17 @@ commentGenerator.commentLine = function(config)
 		local lineStr = ""
 		if bufLineLength > 0 then
 			-- Generate comment divider when bufLineLength > 0.
-			lineStr = generateCommentLine(
+			lineStr = generate_subheader(
 				comment,
 				bufLineLength,
 				commentLength,
-				languageConfig,
+				language_config,
 				endLength,
 				seperatorLength,
 				startLength
 			)
 		else
-			lineStr = generateSolidLine(commentLength, languageConfig, endLength, seperatorLength, startLength)
+			lineStr = generate_solid_line(commentLength, language_config, endLength, seperatorLength, startLength)
 		end
 
 		-- Get current buffer row number.
@@ -197,23 +189,18 @@ end
 
 --- Generate comment box divider.
 ---@param config table config for comment generator.
-commentGenerator.commentBox = function(config)
-	-- Debug enabled.
-	local isDebug = config.debug
+generator.header = function(config)
 	-- Total length of the comment line.
 	local commentLength = config.commentLength
 	-- Get current filetype.
 	local filetype = vim.api.nvim_buf_get_option(0, "filetype")
-	if isDebug then
-		print("Current file type: " .. filetype)
-	end
 	-- Get the language config for current filetype.
-	local languageConfig = config.languageConfig[filetype]
-	languageConfig = languageConfig or config.defaultConfig
+	local language_config = config.language_config[filetype]
+	language_config = language_config or config.default
 	-- Length for line components.
-	local startLength = string.len(languageConfig.lineStart)
-	local seperatorLength = string.len(languageConfig.lineSeperator)
-	local endLength = string.len(languageConfig.lineEnd)
+	local startLength = string.len(language_config.line_start)
+	local seperatorLength = string.len(language_config.character)
+	local endLength = string.len(language_config.line_end)
 
 	-- Start a new line.
 	-- Get current buffer row number.
@@ -229,9 +216,6 @@ commentGenerator.commentBox = function(config)
 		end
 		-- Trim all the white spaces.
 		comment = comment:gsub("^%s*(.-)%s*$", "%1")
-		if isDebug then
-			print("Current buffer line: " .. comment)
-		end
 		-- The length of current buffer line.
 		local bufLineLength = comment:len()
 
@@ -251,28 +235,28 @@ commentGenerator.commentBox = function(config)
 		end
 
 		-- Insert lines.
-		local insertLines = {}
+		local insert_lines = {}
 		-- Top solid line.
 		table.insert(
-			insertLines,
-			generateSolidLine(commentLength, languageConfig, endLength, seperatorLength, startLength)
+			insert_lines,
+			generate_solid_line(commentLength, language_config, endLength, seperatorLength, startLength)
 		)
 		-- Wrapped comment.
 		table.insert(
-			insertLines,
-			generateCenteredComment(comment, bufLineLength, commentLength, languageConfig, endLength, startLength)
+			insert_lines,
+			generate_centered_comment(comment, bufLineLength, commentLength, language_config, endLength, startLength)
 		)
 		-- End solid line.
 		table.insert(
-			insertLines,
-			generateSolidLine(commentLength, languageConfig, endLength, seperatorLength, startLength)
+			insert_lines,
+			generate_solid_line(commentLength, language_config, endLength, seperatorLength, startLength)
 		)
 
 		-- Get current buffer row number.
 		currentRow = vim.api.nvim_win_get_cursor(0)[1]
 		-- Insert lines.
-		vim.api.nvim_buf_set_lines(0, currentRow - 1, currentRow, false, insertLines)
+		vim.api.nvim_buf_set_lines(0, currentRow - 1, currentRow, false, insert_lines)
 	end)
 end
 
-return commentGenerator
+return generator
