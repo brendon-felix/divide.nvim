@@ -38,3 +38,46 @@ Originally forked from [fangjunzhou/comment-divider.nvim](https://github.com/fan
 	},
 }
 ```
+
+## Usage
+
+### Subheader
+
+```lua
+require('divide').subheader()
+```
+
+```
+/* ------------------------------- Subheader -------------------------------- */
+```
+
+### Header
+
+```lua
+require('divide').header()
+```
+
+```
+/* -------------------------------------------------------------------------- */
+/*                                   Header                                   */
+/* -------------------------------------------------------------------------- */
+```
+
+### Divider
+
+```lua
+require('divide').divider()
+```
+
+```
+/* -------------------------------------------------------------------------- */
+```
+
+## TODO
+- [ ] Fix/update user commands
+- [ ] Auto indent (`indent = { enable = true}`)
+- [ ] Shorten with indent (`indent = { enable = true, shorten = true}`)
+- [ ] Multi-character line pattern (change `char` to `pattern`)
+- [ ] Change text alignment (`left`, `right`, `center (default)`)
+- [ ] Multi-line header
+
