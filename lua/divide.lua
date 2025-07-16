@@ -23,14 +23,19 @@ M.filetype = function()
 	print("Current buffer filetype: " .. curr_filetype)
 end
 
---- Generate comment divider line.
+--- Generate comment divider subheader.
 M.subheader = function()
 	divide_generator.subheader(divide_config)
 end
 
---- Generate comment divider box.
+--- Generate comment divider header.
 M.header = function()
 	divide_generator.header(divide_config)
+end
+
+--- Generate comment divider.
+M.divider = function()
+	divide_generator.divider(divide_config)
 end
 
 --- Reload module for development.

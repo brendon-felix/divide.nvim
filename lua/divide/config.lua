@@ -1,26 +1,18 @@
 local default_config = {
-	-- debug = true,
-	length = 80,
+	width = 80,
+	char = "-",
 	default = {
 		line_start = "/*",
 		line_end = "*/",
-		character = "-",
 	},
-	language_config = {
-		cpp = {
-			line_start = "/*",
-			line_end = "*/",
-			character = "-",
-		},
+	languages = {
 		python = {
 			line_start = "#",
 			line_end = "#",
-			character = "-",
 		},
 		lua = {
 			line_start = "--",
 			line_end = "--",
-			character = "-",
 		},
 	},
 }

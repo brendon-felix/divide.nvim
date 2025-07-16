@@ -8,6 +8,11 @@ vim.api.nvim_create_user_command("CommentDividerBox", function()
 	require("divide").header()
 end, { nargs = 0 })
 
+-- Comment divider.
+vim.api.nvim_create_user_command("CommentDivider", function()
+	require("divide").divider()
+end, { nargs = 0 })
+
 -- Show current config.
 vim.api.nvim_create_user_command("CommentDividerConfigInfo", function()
 	require("divide").info()
