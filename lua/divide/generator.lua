@@ -6,16 +6,15 @@ local generator = {}
 generator.subheader = function(config)
 	local width = config.width
 	local char = config.char
-	local filetype = vim.api.nvim_buf_get_option(0, "filetype")
-	local language_config = config.languages[filetype]
-	language_config = language_config or config.default
+	local language = vim.treesitter.get_parser(0):lang()
+	local language_config = config.language_config[language]
 	local line_start = language_config.line_start
 	local line_end = language_config.line_end
 
 	local current_row = vim.api.nvim_win_get_cursor(0)[1]
 	local comment = vim.api.nvim_get_current_line()
 	if comment == "" then
-		vim.api.nvim_err_writeln("No comment found for subheader generation.")
+		vim.api.nvim_echo({ "No comment found for subheader generation." }, true, { err = true })
 		return
 	end
 	comment = " " .. comment:match("^%s*(.-)%s*$") .. " " -- trim with one space on each side
@@ -36,8 +35,8 @@ end
 generator.header = function(config)
 	local width = config.width
 	local char = config.char
-	local filetype = vim.api.nvim_buf_get_option(0, "filetype")
-	local language_config = config.languages[filetype]
+	local language = vim.treesitter.get_parser(0):lang()
+	local language_config = config.language_config[language]
 	language_config = language_config or config.default
 	local line_start = language_config.line_start
 	local line_end = language_config.line_end
@@ -45,7 +44,7 @@ generator.header = function(config)
 	local current_row = vim.api.nvim_win_get_cursor(0)[1]
 	local comment = vim.api.nvim_get_current_line()
 	if comment == "" then
-		vim.api.nvim_err_writeln("No comment found for header generation.")
+		vim.api.nvim_echo({ "No comment found for header generation." }, true, { err = true })
 		return
 	end
 	comment = comment:match("^%s*(.-)%s*$") -- trim white spaces
@@ -73,8 +72,8 @@ end
 generator.divider = function(config)
 	local width = config.width
 	local char = config.char
-	local filetype = vim.api.nvim_buf_get_option(0, "filetype")
-	local language_config = config.languages[filetype]
+	local language = vim.treesitter.get_parser(0):lang()
+	local language_config = config.language_config[language]
 	language_config = language_config or config.default
 	local line_start = language_config.line_start
 	local line_end = language_config.line_end

@@ -6,7 +6,7 @@ Originally forked from [fangjunzhou/comment-divider.nvim](https://github.com/fan
 
 ## Install
 
-### lazy
+### lazy.nvim
 ```lua
 {
 	'brendon-felix/divide.nvim',
@@ -16,6 +16,8 @@ Originally forked from [fangjunzhou/comment-divider.nvim](https://github.com/fan
 ```
 
 ## Configuration
+
+### Default
 
 ```lua
 -- default config
@@ -36,6 +38,49 @@ Originally forked from [fangjunzhou/comment-divider.nvim](https://github.com/fan
 			line_end = "--",
 		},
 	},
+}
+```
+
+### Example Config using lazy.nvim
+
+```lua
+{
+  'brendon-felix/divide.nvim',
+  event = 'VeryLazy',
+  keys = {
+	  {
+		  '<leader>ds',
+		  function()
+			  require('divide').subheader()
+		  end,
+		  desc = '[D]ivide with [S]ubheader',
+	  },
+	  {
+		  '<leader>dh',
+		  function()
+			  require('divide').header()
+		  end,
+		  desc = '[D]ivide with [H]eader',
+	  },
+	  {
+		  '<leader>dd',
+		  function()
+			  require('divide').divider()
+		  end,
+		  desc = '[D]ivide with [D]ivider',
+	  },
+  },
+  config = function()
+	  require('divide').setup {
+		  language_config = {
+			  nu = {
+				  line_start = '#',
+				  line_end = '#',
+				  character = '-',
+			  },
+		  },
+	  }
+  end,
 }
 ```
 
